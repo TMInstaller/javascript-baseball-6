@@ -1,4 +1,11 @@
+/**
+ * 숫자 야구 게임에서 사용자가 입력한 정답에 대한 추측을 나타내는 클래스
+ */
 class Guess {
+  /**
+   * Guess 클래스의 생성자
+   * @param {number[]} value - 사용자가 입력한 1~9 사이의 서로 다른 숫자 3개의 배열
+   */
   constructor(value) {
     if (!this.isValid(value)) {
       throw new Error(
