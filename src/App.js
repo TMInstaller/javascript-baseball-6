@@ -13,17 +13,26 @@ export default class App {
   }
 
   async start() {
-    try {
-      // 게임 시작 멘트 출력
-      this.consoleUI.printGameStartMessage();
+    let restart = true;
+    while (restart) {
+      try {
+        // 게임 시작 멘트 출력
+        this.consoleUI.printGameStartMessage();
 
-      // 게임 메인 로직
-      await this.gameLoop();
+        // 게임 메인 로직
+        await this.gameLoop();
 
-      // 게임 종료 후 처리
-      await this.handlePostGame();
-    } catch (error) {
-      Console.print(error.message);
+        // 게임 재시작 여부를 결정하는 로직
+        const userChoice = await this.consoleUI.promptRestartGame();
+        if (userChoice !== "1") {
+          // 게임 종료 멘트 출력
+          this.consoleUI.printGameEndMessage();
+          restart = false; // 게임을 재시작하지 않고 while 루프 종료
+        }
+      } catch (error) {
+        Console.print(error.message);
+        restart = false; // 예외 발생시 게임 종료
+      }
     }
   }
 
@@ -43,18 +52,6 @@ export default class App {
       if (result === "3스트라이크") {
         isGameOver = true;
       }
-    }
-  }
-
-  async handlePostGame() {
-    // 게임 재시작 여부를 결정하는 로직
-    const userChoice = await this.consoleUI.promptRestartGame();
-    if (userChoice === "1") {
-      // 게임 객체를 새로 생성하여 게임 재시작 하기
-      new App().start();
-    } else {
-      // 게임 종료 멘트 출력
-      this.consoleUI.printGameEndMessage();
     }
   }
 }
